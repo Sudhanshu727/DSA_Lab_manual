@@ -13,23 +13,50 @@ def calculate_battery_power(mah, voltage):
     watt_hours = voltage * amp_hours
     return watt_hours
 
-def main():
-    try:
-        # Get input from user
-        battery_mah = float(input("Enter battery capacity (mAh): "))
-        battery_voltage = float(input("Enter battery voltage (V): "))
-        
-        # Calculate power
-        power = calculate_battery_power(battery_mah, battery_voltage)
-        
-        # Display results
-        print(f"\nBattery Specifications:")
-        print(f"Capacity: {battery_mah} mAh")
-        print(f"Voltage: {battery_voltage} V")
-        print(f"Power: {power:.2f} Wh")
-        
-    except ValueError:
-        print("Please enter valid numeric values!")
+def calculate_battery_capacity(current, hours):
+    """
+    Calculate battery capacity in milliampere-hours (mAh)
+    Parameters:
+        current (float): Current in amperes (A)
+        hours (float): Time in hours (h)
+    Returns:
+        float: Battery capacity in milliampere-hours (mAh)
+    """
+    # Convert current from amperes to milliamperes and calculate capacity
+    mah = current * 1000 * hours
+    return mah
 
-if __name__ == "__main__":
-    main()
+# Typical specifications for AA and AAA batteries
+aa_capacity = 2000  # in mAh
+aaa_capacity = 1000  # in mAh
+voltage = 1.5  # in volts (same for both AA and AAA)
+
+# Calculate power for AA and AAA batteries
+aa_power = calculate_battery_power(aa_capacity, voltage)
+aaa_power = calculate_battery_power(aaa_capacity, voltage)
+
+# Compare and display the results
+print("Battery Power Comparison:")
+print(f"AA Battery: {aa_capacity} mAh, {voltage} V -> {aa_power:.2f} Wh")
+print(f"AAA Battery: {aaa_capacity} mAh, {voltage} V -> {aaa_power:.2f} Wh")
+
+if aa_power > aaa_power:
+    print("\nAA battery has more power than AAA battery.")
+elif aa_power < aaa_power:
+    print("\nAAA battery has more power than AA battery.")
+else:
+    print("\nAA and AAA batteries have the same power.")
+
+# Get input from the user
+try:
+    current = float(input("Enter the current (in amperes): "))
+    hours = float(input("Enter the time (in hours): "))
+    
+    if current < 0 or hours < 0:
+        print("Current and time must be non-negative values.")
+    else:
+        # Calculate battery capacity
+        battery_capacity = calculate_battery_capacity(current, hours)
+        print(f"\nBattery capacity: {battery_capacity:.2f} mAh")
+except ValueError:
+    print("Please enter valid numeric values for current and time.")
